@@ -23,44 +23,46 @@ class GameScene: SKScene {
         
         let background = SKSpriteNode(imageNamed: "background.jpg")
         background.position = CGPoint(x: 70, y: 50)
-        //background.blendMode = .replace
+        background.blendMode = .replace
         background.zPosition = -1
         //        background.size.width = view.frame.width * 1.5
-        //background.size.height = view.frame.height / 2
+        background.size.height = view.frame.height / 1
         addChild(background)
-        //
-        //        let foreground = SKSpriteNode(imageNamed: "foreground.jpg")
-        //        foreground.position = CGPoint(x: size.width - 500, y: 500)
-        //        foreground.zPosition = 0
-        //        addChild(foreground)
-        
         
         princess = SKSpriteNode(imageNamed: "princess.png")
-        princess.position = CGPoint(x: -300, y: -100)
+        princess.position = CGPoint(x: -280, y: -30)
+        princess.zPosition = 1
         addChild(princess)
         
         let Wisp = SKSpriteNode(imageNamed: "Wisp.png")
-        Wisp.position = CGPoint(x: 0, y: -20)
+        Wisp.position = CGPoint(x: 0, y: 0)
         addChild(Wisp)
         
         let hearts = SKSpriteNode(imageNamed: "hearts.png")
-        hearts.position = CGPoint(x: -300, y: 40)
+        hearts.position = CGPoint(x: -280, y: 130)
         addChild(hearts)
         
         leftArrowButton = SKSpriteNode(imageNamed: "leftarrowbutton")
-        leftArrowButton.position = CGPoint(x: -320, y: -150)
+        leftArrowButton.position = CGPoint(x: -320, y: -70)
+        leftArrowButton.zPosition = 2
         self.addChild(leftArrowButton)
         
-        
-        
         rightArrowButton = SKSpriteNode(imageNamed: "rightarrowbutton")
-        rightArrowButton.position = CGPoint(x: 320, y: -150)
+        rightArrowButton.position = CGPoint(x: 350, y: -70)
+        rightArrowButton.zPosition = 2
         self.addChild(rightArrowButton)
+        
+        
+        let dialoguebox = SKSpriteNode(imageNamed: "dialoguebox.png")
+        dialoguebox.position = CGPoint(x: -140, y: -170)
+        dialoguebox.zPosition = 3
+        addChild(dialoguebox)
+        
+        
         
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            // Reset movement flags to prevent moving outside of buttons
             isLeftArrowButtonPressed = false
             isRightArrowButtonPressed = false
             
@@ -75,12 +77,10 @@ class GameScene: SKScene {
             for touch in touches {
                 let touchLocation = touch.location(in: self)
                 
-                // Check if the touch is on the left arrow
                 if leftArrowButton.contains(touchLocation) {
                     isLeftArrowButtonPressed = isTouching
                 }
                 
-                // Check if the touch is on the right arrow
                 else if rightArrowButton.contains(touchLocation) {
                     isRightArrowButtonPressed = isTouching
                 }
@@ -88,7 +88,6 @@ class GameScene: SKScene {
         }
         
         override func update(_ currentTime: TimeInterval) {
-            // Move the princess only when the corresponding button is pressed
             if isLeftArrowButtonPressed {
                 movePrincessLeft()
             }
@@ -109,4 +108,5 @@ class GameScene: SKScene {
                 princess.position.x += 2.5 // Move the princess right
             }
         }
-    }
+}
+
