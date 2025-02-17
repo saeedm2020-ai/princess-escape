@@ -38,7 +38,7 @@ class GameScene: SKScene {
 //        background.position = CGPoint(x: 70, y: 50)
         background.blendMode = .replace
         background.zPosition = -1
-        background.size.width = view.frame.width / 1.15
+        background.size.width = view.frame.width
         background.size.height = view.frame.height
         addChild(background)
         
