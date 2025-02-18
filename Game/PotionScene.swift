@@ -1,30 +1,22 @@
 //
-//  GameScene.swift
+//  PotionScene.swift
+//  FIXME: Simply copy/pasted from GameScene (which should probably be renamed DungeonScene).
+//  In the future, refactor so it doesn't have duplicate code.
+//
 //  Game
 //
-//  Created by Saeed Mohamed on 2/3/25.
+//  Created by Linda Swanson on 2/17/25.
 //
 
 import SpriteKit
 import GameplayKit
 
-// Collision Detection and Physics
-// This code sets up the constants for the physics categories you'll need
-// The category on SpriteKit is just a single 32-bit integer, acting as a bitmask. This is a fancy way of saying each of the 32-bits in the integer represents a single category (and hence you can have 32 categories max). Here you're setting the first bit to indicate a skeleton, the next bit over to represent a princess, and so on.
-struct PhysicsCategory {
-    static let none      : UInt32 = 0
-    static let all       : UInt32 = UInt32.max
-    static let skeleton   : UInt32 = 0b1       // 1
-    static let princess   : UInt32 = 0b10      // 2
-    static let cauldron   : UInt32 = 0b11      // 3??
-}
 
-
-class GameScene: SKScene {
+class PotionScene: SKScene {
     
     // Declare the sprites for the princess, left and right arrows
     var princess: SKSpriteNode!
-    var skeleton: SKSpriteNode!
+    var cauldron: SKSpriteNode!
     var leftArrowButton: SKSpriteNode!
     var rightArrowButton: SKSpriteNode!
     var passedLevel: Bool = false
@@ -35,7 +27,7 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
-        let background = SKSpriteNode(imageNamed: "dungeonBackground")
+        let background = SKSpriteNode(imageNamed: "potionBackground")
 //        background.position = CGPoint(x: 70, y: 50)
         background.blendMode = .replace
         background.zPosition = -1
@@ -54,38 +46,38 @@ class GameScene: SKScene {
         princess.physicsBody?.isDynamic = true
         // 3 Set the category bit mask to be the princessCategory you defined earlier.
         princess.physicsBody?.categoryBitMask = PhysicsCategory.princess
-        // 4 contactTestBitMask indicates what categories of objects this object should notify the contact listener when they intersect. You choose skeleton here.
-        princess.physicsBody?.contactTestBitMask = PhysicsCategory.skeleton
-        // 5 collisionBitMask indicates what categories of objects this object that the physics engine handle contact responses to (i.e. bounce off of). You don't want the skeleton and princess to bounce off each other — it's OK for them to go right through each other in this game — so you set this to .none.
+        // 4 contactTestBitMask indicates what categories of objects this object should notify the contact listener when they intersect. You choose cauldron here.
+        princess.physicsBody?.contactTestBitMask = PhysicsCategory.cauldron
+        // 5 collisionBitMask indicates what categories of objects this object that the physics engine handle contact responses to (i.e. bounce off of). You don't want the cauldron and princess to bounce off each other — it's OK for them to go right through each other in this game — so you set this to .none.
         princess.physicsBody?.collisionBitMask = PhysicsCategory.none
         // 6 This is important to set for fast moving bodies like princesss, because otherwise there is a chance that two fast moving bodies can pass through each other without a collision being detected.
         princess.physicsBody?.usesPreciseCollisionDetection = true
 
         addChild(princess)
         
-        skeleton = SKSpriteNode(imageNamed: "skeleton")
-        skeleton.position = CGPoint(x: 280, y: -30)
-        skeleton.zPosition = 1
+        cauldron = SKSpriteNode(imageNamed: "cauldron")
+        cauldron.position = CGPoint(x: 280, y: -30)
+        cauldron.zPosition = 1
         
         // Collision Detection and Physics: Implementation
-        // 1 Create a physics body for the sprite. In this case, the body is defined as a rectangle of the same size as the sprite, since that's a decent approximation for the skeleton.
-        skeleton.physicsBody = SKPhysicsBody(rectangleOf: skeleton.size)
+        // 1 Create a physics body for the sprite. In this case, the body is defined as a rectangle of the same size as the sprite, since that's a decent approximation for the cauldron.
+        cauldron.physicsBody = SKPhysicsBody(rectangleOf: cauldron.size)
         
-        // 2 Set the sprite to NOT be dynamic. This means that the physics engine will not control the movement of the skeleton. You will through the code you've already written, using move actions.
-        //skeleton.physicsBody?.isDynamic = true
-        skeleton.physicsBody?.isDynamic = false
+        // 2 Set the sprite to NOT be dynamic. This means that the physics engine will not control the movement of the cauldron. You will through the code you've already written, using move actions.
+        //cauldron.physicsBody?.isDynamic = true
+        cauldron.physicsBody?.isDynamic = false
         
-        // 3 Set the category bit mask to be the skeletonCategory you defined earlier.
-        skeleton.physicsBody?.categoryBitMask = PhysicsCategory.skeleton
+        // 3 Set the category bit mask to be the cauldronCategory you defined earlier.
+        cauldron.physicsBody?.categoryBitMask = PhysicsCategory.cauldron
         
         // 4 contactTestBitMask indicates what categories of objects this object should notify the contact listener when they intersect. You choose princess here.
-        skeleton.physicsBody?.contactTestBitMask = PhysicsCategory.princess
+        cauldron.physicsBody?.contactTestBitMask = PhysicsCategory.princess
         
-        // 5 collisionBitMask indicates what categories of objects this object that the physics engine handle contact responses to (i.e. bounce off of). You don't want the skeleton and princess to bounce off each other — it's OK for them to go right through each other in this game — so you set this to .none.
-        // Princess correctly passes in front of skeleton, so that's the intended behaviour.
-        skeleton.physicsBody?.collisionBitMask = PhysicsCategory.none
+        // 5 collisionBitMask indicates what categories of objects this object that the physics engine handle contact responses to (i.e. bounce off of). You don't want the cauldron and princess to bounce off each other — it's OK for them to go right through each other in this game — so you set this to .none.
+        // Princess correctly passes in front of cauldron, so that's the intended behaviour.
+        cauldron.physicsBody?.collisionBitMask = PhysicsCategory.none
 
-        addChild(skeleton)
+        addChild(cauldron)
 
         
         let Wisp = SKSpriteNode(imageNamed: "Wisp")
@@ -175,26 +167,15 @@ class GameScene: SKScene {
             }
         }
     
-    // Method that will be called when the princess collides with the skeleton
-    func princessDidCollideWithSkeleton(princess: SKSpriteNode, skeleton: SKSpriteNode) {
-        // Saeed: This is when we display the skeleton's dialog. Call your dialog box code here.
-        print("Skeleton's dialog goes here.")
-        
-        // FIXME: experiment with calling next room here
-        
-        
-        func proceedToNextLevel() {
-
-            let nextScene = PotionScene(size: self.size) // Create instance of your next scene
-
-            self.view?.presentScene(nextScene, transition: SKTransition.fade(withDuration: 0.5))
-
-        }
+    // Method that will be called when the princess collides with the cauldron
+    func princessDidCollideWithCauldron(princess: SKSpriteNode, cauldron: SKSpriteNode) {
+        // Saeed: This is when we display the cauldron's dialog. Call your dialog box code here.
+        print("cauldron's dialog goes here.")
     }
 }
 
-// create an extension at the end of GameScene.swift implementing the SKPhysicsContactDelegate protocol
-extension GameScene: SKPhysicsContactDelegate {
+// create an extension at the end of PotionScene.swift implementing the SKPhysicsContactDelegate protocol
+extension PotionScene: SKPhysicsContactDelegate {
   
   // contact delegate method
   // Since you set the scene as the physics world's contactDelegate earlier, this method will be called whenever two physics bodies collide and their contactTestBitMasks are set appropriately.
@@ -210,12 +191,13 @@ extension GameScene: SKPhysicsContactDelegate {
       secondBody = contact.bodyA
     }
    
-    // 2 Here is the check to see if the two bodies that collided are the princess and skeleton, and if so, the method you wrote earlier is called.
-    if ((firstBody.categoryBitMask & PhysicsCategory.skeleton != 0) &&
+    // 2 Here is the check to see if the two bodies that collided are the princess and cauldron, and if so, the method you wrote earlier is called.
+    if ((firstBody.categoryBitMask & PhysicsCategory.cauldron != 0) &&
         (secondBody.categoryBitMask & PhysicsCategory.princess != 0)) {
-        if let skeleton = firstBody.node as? SKSpriteNode,
+        if let cauldron = firstBody.node as? SKSpriteNode,
         let princess = secondBody.node as? SKSpriteNode {
-          princessDidCollideWithSkeleton(princess: princess, skeleton: skeleton)
+            // FIXME: Commented out so it will build, so I can check it in.
+            //princessDidCollideWithCauldron(princess: <#T##SKSpriteNode#>, cauldron: <#T##SKSpriteNode#>)(princess: princess, cauldron: cauldron)
       }
     }
   }

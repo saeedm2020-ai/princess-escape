@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "potionBackground.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
